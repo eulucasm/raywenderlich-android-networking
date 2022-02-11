@@ -39,9 +39,7 @@ import com.raywenderlich.android.taskie.model.UserProfile
 import com.raywenderlich.android.taskie.model.request.AddTaskRequest
 import com.raywenderlich.android.taskie.model.request.UserDataRequest
 
-/**
- * Holds decoupled logic for all the API calls.
- */
+
 
 const val BASE_URL = "https://taskie-rw.herokuapp.com"
 
