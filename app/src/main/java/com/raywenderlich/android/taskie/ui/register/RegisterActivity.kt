@@ -49,55 +49,52 @@ import kotlinx.android.synthetic.main.activity_register.*
 /**
  * Displays the Register screen, with the options to register, or head over to Login!
  */
-
 class RegisterActivity : AppCompatActivity() {
 
-   private val networkStatusChecker by lazy {
-      NetworkStatusChecker(getSystemService(ConnectivityManager::class.java))
-   }
+  private val remoteApi = RemoteApi()
 
-   private val remoteApi = RemoteApi()
+  private val networkStatusChecker by lazy {
+    NetworkStatusChecker(getSystemService(ConnectivityManager::class.java))
+  }
 
-   override fun onCreate(savedInstanceState: Bundle?) {
-      super.onCreate(savedInstanceState)
-      setContentView(R.layout.activity_register)
-      initUi()
-   }
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_register)
+    initUi()
+  }
 
-   private fun initUi() {
-      register.setOnClickListener {
-         processData(
-            nameInput.text.toString(), emailInput.text.toString(),
-            passwordInput.text.toString()
-         )
-      }
-   }
+  private fun initUi() {
+    register.setOnClickListener {
+      processData(nameInput.text.toString(), emailInput.text.toString(),
+          passwordInput.text.toString())
+    }
+  }
 
-   private fun processData(username: String, email: String, password: String) {
-      if (username.isNotBlank() && email.isNotBlank() && password.isNotBlank()) {
-         networkStatusChecker.performIfConnectedToInternet {
-            remoteApi.registerUser(UserDataRequest(email, password, username)) { message, error ->
-               runOnUiThread {
-                  if (message != null) {
-                     toast(message)
-                     onRegisterSuccess()
-                  } else if (error != null) {
-                     onRegisterError()
-                  }
-               }
+  private fun processData(username: String, email: String, password: String) {
+    if (username.isNotBlank() && email.isNotBlank() && password.isNotBlank()) {
+      networkStatusChecker.performIfConnectedToInternet {
+        remoteApi.registerUser(UserDataRequest(email, password, username)) { message, error ->
+          runOnUiThread {
+            if (message != null) {
+              toast(message)
+              onRegisterSuccess()
+            } else if (error != null) {
+              onRegisterError()
             }
-         }
-      } else {
-         onRegisterError()
+          }
+        }
       }
-   }
+    } else {
+      onRegisterError()
+    }
+  }
 
-   private fun onRegisterSuccess() {
-      errorText.gone()
-      finish()
-   }
+  private fun onRegisterSuccess() {
+    errorText.gone()
+    finish()
+  }
 
-   private fun onRegisterError() {
-      errorText.visible()
-   }
+  private fun onRegisterError() {
+    errorText.visible()
+  }
 }
